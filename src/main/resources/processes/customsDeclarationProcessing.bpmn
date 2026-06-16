@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_1"
+                  targetNamespace="http://camunda.org/examples"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.0.0">
+
+    <bpmn:process id="customsDeclarationProcessing" name="Таможенное оформление"
+                  isExecutable="true"
+                  camunda:historyTimeToLive="P30D">
+
+        <!-- Входные данные процесса -->
+        <bpmn:extensionElements>
+            <camunda:inputOutput>
+                <camunda:inputParameter name="declarationXml">String – входящий XML-файл декларации</camunda:inputParameter>
+            </camunda:inputOutput>
+        </bpmn:extensionElements>
+
+        <bpmn:startEvent id="StartEvent_1" name="Декларация получена">
+            <bpmn:outgoing>Flow_0</bpmn:outgoing>
+        </bpmn:startEvent>
+
+        <!-- Валидация XML -->
+        <bpmn:serviceTask id="validateXml" name="Валидация XML"
+                          camunda:delegateExpression="${validateXmlDelegate}">
+            <bpmn:incoming>Flow_0</bpmn:incoming>
+            <bpmn:outgoing>Flow_1</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <!-- Классификация товара (без DMN, через JavaDelegate) -->
+        <bpmn:serviceTask id="classifyGoods" name="Классификация товара"
+                          camunda:delegateExpression="${classifyGoodsDelegate}">
+            <bpmn:incoming>Flow_1</bpmn:incoming>
+            <bpmn:outgoing>Flow_2</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <!-- Расчёт пошлины -->
+        <bpmn:serviceTask id="calculateDuty" name="Расчёт пошлины"
+                          camunda:delegateExpression="${calculateDutyDelegate}">
+            <bpmn:incoming>Flow_2</bpmn:incoming>
+            <bpmn:outgoing>Flow_3</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <!-- Формирование отчёта -->
+        <bpmn:serviceTask id="generateReport" name="Формирование отчёта"
+                          camunda:delegateExpression="${generateReportDelegate}">
+            <bpmn:incoming>Flow_3</bpmn:incoming>
+            <bpmn:outgoing>Flow_4</bpmn:outgoing>
+        </bpmn:serviceTask>
+
+        <bpmn:endEvent id="EndEvent_1" name="Обработка завершена">
+            <bpmn:incoming>Flow_4</bpmn:incoming>
+        </bpmn:endEvent>
+
+        <bpmn:sequenceFlow id="Flow_0" sourceRef="StartEvent_1" targetRef="validateXml" />
+        <bpmn:sequenceFlow id="Flow_1" sourceRef="validateXml" targetRef="classifyGoods" />
+        <bpmn:sequenceFlow id="Flow_2" sourceRef="classifyGoods" targetRef="calculateDuty" />
+        <bpmn:sequenceFlow id="Flow_3" sourceRef="calculateDuty" targetRef="generateReport" />
+        <bpmn:sequenceFlow id="Flow_4" sourceRef="generateReport" targetRef="EndEvent_1" />
+
+    </bpmn:process>
+
+    <!-- Диаграмма (можно оставить твою) -->
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="customsDeclarationProcessing">
+            <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+                <dc:Bounds x="152" y="102" width="36" height="36" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="139" y="145" width="64" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="validateXml_di" bpmnElement="validateXml">
+                <dc:Bounds x="250" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="classifyGoods_di" bpmnElement="classifyGoods">
+                <dc:Bounds x="410" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="calculateDuty_di" bpmnElement="calculateDuty">
+                <dc:Bounds x="570" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="generateReport_di" bpmnElement="generateReport">
+                <dc:Bounds x="730" y="80" width="100" height="80" />
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+                <dc:Bounds x="892" y="102" width="36" height="36" />
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="879" y="145" width="64" height="14" />
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="Flow_0_di" bpmnElement="Flow_0">
+                <di:waypoint x="188" y="120" />
+                <di:waypoint x="250" y="120" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+                <di:waypoint x="350" y="120" />
+                <di:waypoint x="410" y="120" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+                <di:waypoint x="510" y="120" />
+                <di:waypoint x="570" y="120" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+                <di:waypoint x="670" y="120" />
+                <di:waypoint x="730" y="120" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+                <di:waypoint x="830" y="120" />
+                <di:waypoint x="892" y="120" />
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>

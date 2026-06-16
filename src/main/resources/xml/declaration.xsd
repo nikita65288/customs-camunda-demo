@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Корневой элемент таможенной декларации -->
+    <xs:element name="customsDeclaration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="declarationId" type="xs:string"/>
+                <xs:element name="declarant" type="xs:string"/>
+                <xs:element name="goods">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="item" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="code" type="xs:string"/>
+                                        <xs:element name="name" type="xs:string"/>
+                                        <xs:element name="quantity" type="xs:integer"/>
+                                        <xs:element name="customsValue" type="xs:decimal"/>
+                                        <xs:element name="origin" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
