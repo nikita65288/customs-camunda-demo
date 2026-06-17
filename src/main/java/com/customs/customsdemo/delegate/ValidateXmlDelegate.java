@@ -1,6 +1,5 @@
 package com.customs.customsdemo.delegate;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ public class ValidateXmlDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
         String declarationXml = (String) execution.getVariable("declarationXml");
         if (declarationXml == null || declarationXml.isEmpty()) {
-            throw new BpmnError("VALIDATION_ERROR", "The incoming declaration XML is missing");
+            throw new RuntimeException("The incoming declaration XML is missing");
         }
 
         Schema schema;
@@ -34,7 +33,7 @@ public class ValidateXmlDelegate implements JavaDelegate {
             schema = factory.newSchema(new ClassPathResource(XSD_PATH).getURL());
         } catch (Exception e) {
             LOG.error("Error loading XSD schema", e);
-            throw new BpmnError("VALIDATION_ERROR", "Failed to load XSD schema: " + e.getMessage());
+            throw new RuntimeException("Failed to load XSD schema: " + e.getMessage());
         }
 
         Validator validator = schema.newValidator();
@@ -42,7 +41,7 @@ public class ValidateXmlDelegate implements JavaDelegate {
             validator.validate(new StreamSource(new StringReader(declarationXml)));
         } catch (org.xml.sax.SAXException e) {
             LOG.error("XML validation error", e);
-            throw new BpmnError("VALIDATION_ERROR", "XML does not match the schema: " + e.getMessage());
+            throw new RuntimeException("XML does not match the schema: " + e.getMessage());
         }
 
         // Успешная валидация – сохраняем исходный XML как валидированный

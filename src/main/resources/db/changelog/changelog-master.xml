@@ -19,11 +19,11 @@
     <changeSet id="2" author="developer">
         <insert tableName="CUSTOMS_RATES">
             <column name="goods_code" value="8471300000"/>
-            <column name="duty_rate" valueNumeric="0.05"/>
+            <column name="duty_rate" valueNumeric="5.0"/>
         </insert>
         <insert tableName="CUSTOMS_RATES">
             <column name="goods_code" value="6204623100"/>
-            <column name="duty_rate" valueNumeric="0.12"/>
+            <column name="duty_rate" valueNumeric="12.0"/>
         </insert>
     </changeSet>
 

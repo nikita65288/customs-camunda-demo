@@ -5,7 +5,6 @@
                 exclude-result-prefixes="exsl">
 
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-    <xsl:param name="rate" select="0"/>
 
     <!-- Основной шаблон: двухпроходная обработка -->
     <xsl:template match="/">
@@ -29,7 +28,7 @@
         <xsl:copy>
             <xsl:apply-templates select="@*|*|text()" mode="addDuty"/>
             <calculatedDuty>
-                <xsl:value-of select="format-number(customsValue * $rate, '0.00')"/>
+                <xsl:value-of select="translate(customsValue, ',', '') * dutyRate div 100"/>
             </calculatedDuty>
         </xsl:copy>
     </xsl:template>

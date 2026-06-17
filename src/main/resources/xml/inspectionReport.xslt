@@ -43,8 +43,8 @@
                                 <td><xsl:value-of select="code"/></td>
                                 <td><xsl:value-of select="name"/></td>
                                 <td><xsl:value-of select="quantity"/></td>
-                                <td><xsl:value-of select="format-number(customsValue, '#,##0.00')"/></td>
-                                <td><xsl:value-of select="calculatedDuty"/></td>
+                                <td><xsl:value-of select="format-number(number(translate(customsValue, ',', '')), '#,##0.00')"/></td>
+                                <td><xsl:value-of select="format-number(number(calculatedDuty), '#,##0.00')"/></td>
                             </tr>
                         </xsl:for-each>
                     </tbody>

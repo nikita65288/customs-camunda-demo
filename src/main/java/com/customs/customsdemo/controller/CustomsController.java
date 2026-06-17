@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -26,7 +28,7 @@ public class CustomsController {
         this.runtimeService = runtimeService;
     }
 
-    @PostMapping("/process")
+    @PostMapping(value = "/process", produces = "text/html;charset=UTF-8")
     public ResponseEntity<String> processDeclaration(@RequestBody String declarationXml) {
         try {
             // Синхронный запуск процесса и получение результирующих переменных
@@ -49,6 +51,13 @@ public class CustomsController {
         }
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("message", "Validation error: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
     /**
      * Извлекает текст ошибки BPMN из цепочки исключений.
      */
@@ -56,14 +65,14 @@ public class CustomsController {
         Throwable cause = e;
         while (cause != null) {
             if (cause instanceof BpmnError) {
-                return "Ошибка обработки: " + cause.getMessage();
+                return "Processing error: " + cause.getMessage();
             }
             cause = cause.getCause();
         }
         if (e != null) {
-            return "Внутренняя ошибка: " + e.getMessage();
+            return "Internal error: " + e.getMessage();
         } else {
-            return "Неизвестная ошибка";
+            return "Unknown exception";
         }
     }
 }

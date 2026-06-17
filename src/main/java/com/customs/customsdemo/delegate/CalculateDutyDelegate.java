@@ -22,24 +22,16 @@ public class CalculateDutyDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        String validatedXml = (String) execution.getVariable("validatedXml");
-        Double rate = (Double) execution.getVariable("rate");
-
-        if (validatedXml == null || validatedXml.isEmpty()) {
-            throw new RuntimeException("validatedXml variable is not set");
-        }
-        if (rate == null) {
-            throw new RuntimeException("rate variable is not set");
+        String enrichedXml = (String) execution.getVariable("enrichedXml");
+        if (enrichedXml == null || enrichedXml.isEmpty()) {
+            throw new RuntimeException("enrichedXml variable is not set");
         }
 
         TransformerFactory factory = TransformerFactory.newInstance();
         StreamSource xsltSource = new StreamSource(new ClassPathResource(XSLT_PATH).getInputStream());
         Transformer transformer = factory.newTransformer(xsltSource);
 
-        // Передаём параметр rate в XSLT
-        transformer.setParameter("rate", rate);
-
-        StreamSource xmlSource = new StreamSource(new StringReader(validatedXml));
+        StreamSource xmlSource = new StreamSource(new StringReader(enrichedXml));
         StringWriter writer = new StringWriter();
         StreamResult result = new StreamResult(writer);
 

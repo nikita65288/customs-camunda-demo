@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customsDeclaration
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="declaration.xsd">
+    <declarationId>10702030/140522/0012345</declarationId>
+    <declarant>ООО «Импортёр»</declarant>
+    <goods>
+        <item>
+            <code>8471300000</code>
+            <name>Ноутбуки</name>
+            <quantity>100</quantity>
+            <customsValue>5000000</customsValue>
+            <origin>Китай</origin>
+        </item>
+        <item>
+            <code>6204623100</code>
+            <name>Смартфоны</name>
+            <quantity>50</quantity>
+            <customsValue>3000000</customsValue>
+            <origin>Вьетнам</origin>
+        </item>
+    </goods>
+</customsDeclaration>

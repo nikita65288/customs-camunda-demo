@@ -8,7 +8,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 
@@ -29,12 +28,13 @@ public class ProcessDeployer {
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             Resource[] resources = resolver.getResources("classpath*:/processes/*.bpmn");
             for (Resource resource : resources) {
-                LOG.info("Deploying process: {}", resource.getFilename());
+                String fileName = resource.getFilename();
+                LOG.info("Deploying process: {}", fileName);
                 repositoryService.createDeployment()
-                        .addInputStream(resource.getFilename(), resource.getInputStream())
-                        .name(resource.getFilename())
+                        .addInputStream(fileName, resource.getInputStream())
+                        .name(fileName)
                         .deploy();
-                LOG.info("Deployed process: {}", resource.getFilename());
+                LOG.info("Deployed process: {}", fileName);
             }
             if (resources.length == 0) {
                 LOG.warn("No BPMN files found in classpath*:/processes/");
