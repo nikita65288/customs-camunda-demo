@@ -17,6 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * REST-контроллер для обработки таможенных деклараций.
+ *
+ * Принимает XML-документ декларации, запускает процесс Camunda
+ * {@code customsDeclarationProcessing} и возвращает сгенерированный HTML-отчёт.
+ *
+ */
 @RestController
 @RequestMapping("/api/customs/declaration")
 public class CustomsController {
@@ -60,6 +67,12 @@ public class CustomsController {
 
     /**
      * Извлекает текст ошибки BPMN из цепочки исключений.
+     *
+     * Поиск ведётся по исключениям типа {@link BpmnError}, и, если такой найден,
+     * возвращается его сообщение. Иначе возвращается сообщение исходного исключения.
+     *
+     * @param e исходное исключение ProcessEngineException
+     * @return строка с описанием ошибки
      */
     private String extractBpmnErrorMessage(ProcessEngineException e) {
         Throwable cause = e;

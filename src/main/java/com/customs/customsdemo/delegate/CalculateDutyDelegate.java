@@ -14,6 +14,15 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+/**
+ * Делегат Camunda для расчёта таможенных пошлин на основе обогащённого XML.
+ *
+ * Применяет XSLT-преобразование ({@code /xml/dutyCalculation.xslt}) к XML,
+ * содержащему информацию о товарах и ставках, и сохраняет результат
+ * в переменную {@code dutyXml}.
+ *
+ * Вызывается из BPMN-процесса {@code customsDeclarationProcessing}.
+ */
 @Component
 public class CalculateDutyDelegate implements JavaDelegate {
 

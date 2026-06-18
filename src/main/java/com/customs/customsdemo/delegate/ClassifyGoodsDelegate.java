@@ -23,6 +23,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+/**
+ * Делегат Camunda для классификации товаров и добавления ставок пошлин.
+ *
+ * Читает валидированный XML, для каждого элемента {@code item} извлекает код товара,
+ * ищет соответствующую ставку в таблице {@code CUSTOMS_RATES}, и добавляет
+ * дочерний элемент {@code dutyRate} с вычисленным значением.
+ * Если ставка не найдена, используется значение по умолчанию 0.15.
+ *
+ * Результат (обогащённый XML) сохраняется в переменную {@code enrichedXml}.
+ */
 @Component
 public class ClassifyGoodsDelegate implements JavaDelegate {
 

@@ -14,6 +14,13 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+/**
+ * Делегат Camunda для генерации HTML-отчёта по результатам расчёта пошлин.
+ *
+ * Применяет XSLT-преобразование ({@code /xml/inspectionReport.xslt}) к XML
+ * с рассчитанными пошлинами ({@code dutyXml}) и сохраняет полученный HTML
+ * в переменную {@code reportHtml}.
+ */
 @Component
 public class GenerateReportDelegate implements JavaDelegate {
 

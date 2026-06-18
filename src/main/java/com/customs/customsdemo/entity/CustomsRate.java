@@ -5,6 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * Сущность, представляющая ставку таможенной пошлины для определённого кода товара.
+ *
+ * Маппится на таблицу {@code CUSTOMS_RATES} в базе данных.
+ */
 @Entity
 @Table(name = "CUSTOMS_RATES")
 public class CustomsRate {

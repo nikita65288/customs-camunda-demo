@@ -11,6 +11,13 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * Автоматический деплой BPMN-процессов при запуске приложения.
+ *
+ * Сканирует папку classpath*:/processes/ на наличие файлов с расширением .bpmn
+ * и развёртывает их в движке Camunda.
+ *
+ */
 @Component
 public class ProcessDeployer {
 
@@ -22,6 +29,14 @@ public class ProcessDeployer {
         this.repositoryService = repositoryService;
     }
 
+    /**
+     * Обработчик события готовности приложения (после запуска контекста).
+     * Выполняет деплой всех найденных BPMN-файлов.
+     *
+     * В случае отсутствия файлов логирует предупреждение.
+     * При ошибках ввода-вывода логирует ошибку и продолжает работу.
+     *
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void deployProcesses() {
         try {
